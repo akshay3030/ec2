@@ -1,0 +1,5 @@
+First project using GO, the expected result is control ec2 instances.
+What is possible to do:
+  - List instances
+  - Stop instance
+  - Start instance
