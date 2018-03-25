@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ec2"
 )
@@ -18,4 +20,13 @@ func trimQuotes(s string) string {
 		}
 	}
 	return s
+}
+
+func confirmation() bool {
+	var answer string
+	fmt.Scanf("%s", &answer)
+	if answer != "yes" {
+		return false
+	}
+	return true
 }

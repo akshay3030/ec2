@@ -7,23 +7,39 @@ import (
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/ec2"
+	"github.com/fatih/color"
 )
 
-func list() (response []string) {
+func list() {
 	// Call to get detailed information on each instance
 	result, err := ec2Svc.DescribeInstances(nil)
 	if err != nil {
 		fmt.Println("Error", err)
 	}
-
-	var instances []string
-	for i := range result.Reservations {
-		res, _ := json.Marshal(result.Reservations[i].Instances[0].InstanceId)
-		instances = append(instances, string(res))
+	for _, reservation := range result.Reservations {
+		for _, instance := range reservation.Instances {
+			id := *instance.InstanceId
+			var name string
+			status := *instance.State.Name
+			for _, tag := range instance.Tags {
+				if *tag.Key == "Name" {
+					name = *tag.Value
+				}
+			}
+			switch status {
+			case "running":
+				fmt.Printf("%s | %s | %s \n", id, color.GreenString(status), name)
+			case "stopped":
+				fmt.Printf("%s | %s | %s \n", id, color.RedString(status), name)
+			case "pending":
+				fmt.Printf("%s | %s | %s \n", id, color.YellowString(status), name)
+			case "stopping":
+				fmt.Printf("%s | %s | %s \n", id, color.YellowString(status), name)
+			default:
+				fmt.Printf("%s | %s | %s \n", id, status, name)
+			}
+		}
 	}
-
-	return instances
-
 }
 
 func listByName(name string) (response []string) {

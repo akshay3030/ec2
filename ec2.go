@@ -9,7 +9,6 @@ import (
 )
 
 func main() {
-
 	app := cli.NewApp()
 	app.Name = "luizc2"
 	app.Usage = "Easy way to stop/start/backup AWS instances from cli"
@@ -19,10 +18,7 @@ func main() {
 			Usage:   "list instances",
 			Aliases: []string{"ls"},
 			Action: func(c *cli.Context) error {
-				ec2list := list()
-				for i, v := range ec2list {
-					fmt.Printf("%d - %s\n", i, trimQuotes(v))
-				}
+				list()
 				return nil
 			},
 		},
@@ -34,8 +30,19 @@ func main() {
 					start(os.Args[2])
 				} else {
 					inst := listByName(os.Args[2])
-					for _, v := range inst {
-						start(trimQuotes(v))
+					if len(inst) > 1 {
+						fmt.Println("Start all these instances?")
+						for _, v := range inst {
+							fmt.Println(trimQuotes(v))
+						}
+						fmt.Println("Type yes to confirm")
+						if confirmation() {
+							for _, v := range inst {
+								start(trimQuotes(v))
+							}
+						}
+					} else {
+						start(trimQuotes(inst[0]))
 					}
 				}
 
@@ -50,8 +57,19 @@ func main() {
 					stop(os.Args[2])
 				} else {
 					inst := listByName(os.Args[2])
-					for _, v := range inst {
-						stop(trimQuotes(v))
+					if len(inst) > 1 {
+						fmt.Println("Stop all these instances?")
+						for _, v := range inst {
+							fmt.Println(trimQuotes(v))
+						}
+						fmt.Println("Type yes to confirm")
+						if confirmation() {
+							for _, v := range inst {
+								stop(trimQuotes(v))
+							}
+						}
+					} else {
+						stop(trimQuotes(inst[0]))
 					}
 				}
 				return nil
