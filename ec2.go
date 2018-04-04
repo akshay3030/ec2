@@ -1,9 +1,7 @@
 package main
 
 import (
-	"fmt"
 	"os"
-	"strings"
 
 	"github.com/urfave/cli"
 )
@@ -26,25 +24,7 @@ func main() {
 			Name:  "start",
 			Usage: "start instance",
 			Action: func(c *cli.Context) error {
-				if strings.HasPrefix(os.Args[2], "i-") {
-					start(os.Args[2])
-				} else {
-					inst := listByName(os.Args[2])
-					if len(inst) > 1 {
-						fmt.Println("Start all these instances?")
-						for _, v := range inst {
-							fmt.Println(trimQuotes(v))
-						}
-						fmt.Println("Type yes to confirm")
-						if confirmation() {
-							for _, v := range inst {
-								start(trimQuotes(v))
-							}
-						}
-					} else {
-						start(trimQuotes(inst[0]))
-					}
-				}
+				start(os.Args)
 
 				return nil
 			},
@@ -53,25 +33,8 @@ func main() {
 			Name:  "stop",
 			Usage: "stopt instance",
 			Action: func(c *cli.Context) error {
-				if strings.HasPrefix(os.Args[2], "i-") {
-					stop(os.Args[2])
-				} else {
-					inst := listByName(os.Args[2])
-					if len(inst) > 1 {
-						fmt.Println("Stop all these instances?")
-						for _, v := range inst {
-							fmt.Println(trimQuotes(v))
-						}
-						fmt.Println("Type yes to confirm")
-						if confirmation() {
-							for _, v := range inst {
-								stop(trimQuotes(v))
-							}
-						}
-					} else {
-						stop(trimQuotes(inst[0]))
-					}
-				}
+				stop(os.Args)
+
 				return nil
 			},
 		},
