@@ -7,9 +7,13 @@ import (
 )
 
 func main() {
+
 	app := cli.NewApp()
 	app.Name = "luizc2"
 	app.Usage = "Easy way to stop/start/backup AWS instances from cli"
+	app.Flags = []cli.Flag{
+		cli.StringFlag{Name: "region", Usage: "set region or use all"},
+	}
 	app.Commands = []cli.Command{
 		{
 			Name:    "list",
@@ -40,5 +44,7 @@ func main() {
 		},
 	}
 
+	app.Before = setregion
 	app.Run(os.Args)
+
 }
