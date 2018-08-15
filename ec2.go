@@ -64,6 +64,16 @@ func main() {
 				return nil
 			},
 		},
+		{
+			Name:    "IP",
+			Usage:   "IP instance",
+			Aliases: []string{"ip", "hostname"},
+			Action: func(c *cli.Context) error {
+				getIP(os.Args)
+
+				return nil
+			},
+		},
 	}
 
 	app.Before = createSession
