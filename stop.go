@@ -9,32 +9,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/ec2"
 )
 
-func stop(args []string) {
-
-	var instanceIds []*string
-
-	for _, inst := range args[2:] {
-		if strings.HasPrefix(inst, "i-") {
-			instanceIds = append(instanceIds, aws.String(inst))
-		} else {
-			id := listByName(inst)
-			if len(id) > 1 {
-				fmt.Println("Start all these instances?")
-				for _, v := range id {
-					fmt.Println(trimQuotes(v))
-				}
-				fmt.Println("Type yes to confirm")
-				if confirmation() {
-					for _, v := range id {
-						instanceIds = append(instanceIds, aws.String(trimQuotes(v)))
-					}
-				}
-			} else {
-				instanceIds = append(instanceIds, aws.String(trimQuotes(id[0])))
-			}
-		}
-	}
-
+func ec2StopRequest(instanceIds []*string) {
 	input := &ec2.StopInstancesInput{
 		InstanceIds: instanceIds,
 		DryRun:      aws.Bool(false),
@@ -46,5 +21,37 @@ func stop(args []string) {
 	} else {
 		fmt.Println("Success", result)
 	}
+}
 
+func stop(args []string) {
+
+	var instanceIds []*string
+
+	for _, inst := range args {
+		if strings.HasPrefix(inst, "i-") {
+			instanceIds = append(instanceIds, aws.String(inst))
+		} else {
+			var id []string
+			id = listByName(inst)
+
+			if len(id) != 0 {
+				instanceIds = append(instanceIds, aws.String(trimQuotes(id[0])))
+			}
+		}
+	}
+
+	switch len(instanceIds) {
+	case 0:
+		fmt.Println("No instances to found")
+	case 1:
+		ec2StopRequest(instanceIds)
+	default:
+		for _, v := range instanceIds {
+			fmt.Printf("%s \n", *v)
+		}
+		fmt.Println("Type yes to confirm")
+		if confirmation() {
+			ec2StopRequest(instanceIds)
+		}
+	}
 }
