@@ -1,7 +1,6 @@
 This project was created to help me managing ec2 instances.
 
-![Image of ec2 command]
-(https://s3-eu-west-1.amazonaws.com/nqaeb/ec2.gif)
+![Image of ec2 command](https://s3-eu-west-1.amazonaws.com/nqaeb/ec2.gif)
 
 Supported operations:
   - List instances
