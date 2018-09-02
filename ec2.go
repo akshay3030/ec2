@@ -74,6 +74,16 @@ func main() {
 				return nil
 			},
 		},
+		{
+			Name:    "backup",
+			Usage:   "backup instance",
+			Aliases: []string{"bck"},
+			Action: func(c *cli.Context) error {
+				backup(os.Args)
+
+				return nil
+			},
+		},
 	}
 
 	app.Before = createSession
