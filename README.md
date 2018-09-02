@@ -8,15 +8,15 @@ Supported operations:
 
 
   - Stop/Start instance
-    * ec2 stop/start <instance-id> or <instance name>
+    * ec2 stop/start instance-id or instance name
 
 
   - Get ip/hostname
-    * ec2 ip <instance-id> or <instance name>
+    * ec2 ip instance-id or instance name
 
 
   - Backup instance (EBS volumes snapshot)
-    * ec2 backup <instance-id> or <instance name>
+    * ec2 backup instance-id or instance name
 
 Options:
 
