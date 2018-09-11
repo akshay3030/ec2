@@ -35,7 +35,9 @@ func stop(args []string) {
 			id = listByName(inst)
 
 			if len(id) != 0 {
-				instanceIds = append(instanceIds, aws.String(trimQuotes(id[0])))
+				for _, i := range id {
+					instanceIds = append(instanceIds, aws.String(trimQuotes(i)))
+				}
 			}
 		}
 	}
